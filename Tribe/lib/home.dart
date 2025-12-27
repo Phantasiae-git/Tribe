@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tribe/delete.dart';
 import 'create.dart';
 import 'fetch.dart';
 import 'update.dart';
@@ -39,7 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(builder: (context) => const UpdateScreen()),
                 );
             }, child: Text("PUT/PATCH")),
-            ElevatedButton(onPressed: () {}, child: Text("DELETE")),
+            ElevatedButton(onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DeleteScreen()),
+                );
+            }, child: Text("DELETE")),
           ],
         ),
       ),

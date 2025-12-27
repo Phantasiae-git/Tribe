@@ -65,3 +65,16 @@ app.put("/api/update/:id", (req, res)=>{
         "message": "Product updated successfully"
     })
 });
+
+app.delete("/api/delete/:id", (req, res) => {
+    let id =req.params.id;
+    let productToUpdate = productData.find(p=>p.id==id);
+    let index = productData.indexOf(productToUpdate);
+
+    productData.splice(index, 1);
+
+    res.status(200).send({
+        "status_code": 200,
+        "message": "Product deleted successfully"
+    })
+});

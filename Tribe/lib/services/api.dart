@@ -64,4 +64,21 @@ class Api {
       print(e.toString());
     }
   }
+
+//delete method
+static deleteProduct(id) async {
+
+    var url = Uri.parse("${baseUrl}delete/$id");
+    try {
+      final res = await http.delete(url);
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        print(data);
+      } else {
+        print("Failed to delete");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
