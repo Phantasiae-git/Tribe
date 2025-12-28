@@ -21,3 +21,4 @@ Follow this page https://docs.flutter.dev/platform-integration/android/setup
 ## Running the project itself:
 
 After this you can clone the repo, do `npm install` for the backend and `flutter pub get` for the frontend (this installs the needed dependencies). Add the .env that can be found in the project's Notion, then on VS code open the command palette and do Flutter: select device. Choose a virtual phone or your own if it’s connected via USB. Then navigate to main.dart and click on the play icon to run and debug the app!
+If using the emulator: open the settings and configure the proxy to your IP + server port, if using usb-connected phone: idk tbh
