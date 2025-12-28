@@ -35,9 +35,9 @@ class Api {
       final res = await http.get(url);
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
-
+        print(data);
         data['products'].forEach((value) => {
-          products.add(Product(name: value['pname'], price: value['pprice'], desc: value['pdesc'], id: value['id'].toString()))
+          products.add(Product(id: value['_id'], name: value['pname'], price: value['pprice'], desc: value['pdesc']))
         });
         return products;
       } else {
