@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 let dataSchema = new mongoose.Schema({
     'pname': {
         required: true,
@@ -14,5 +13,5 @@ let dataSchema = new mongoose.Schema({
         type: String
     },
 });
-
-module.exports = mongoose.model("node_js", dataSchema);
+export const Product = mongoose.model("node_js", dataSchema);
+//# sourceMappingURL=product.js.map

@@ -1,19 +1,22 @@
 {
-  "name": "node_server",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
-  },
-  "dependencies": {
-    "express": "^5.2.1",
-    "mongodb": "^7.0.0",
-    "mongoose": "^9.0.2",
-    "nodemon": "^3.1.11"
-  }
+	"main": "build/index.js",
+	"type": "module",
+	"devDependencies": {
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@types/express": "^5.0.6",
+		"@types/node": "^25.0.3",
+		"dotenv": "^17.2.3",
+		"express": "^5.2.1",
+		"mongodb": "^7.0.0",
+		"mongoose": "^9.0.2",
+		"nodemon": "^3.1.11",
+		"ts-node": "^10.9.2"
+	},
+	"scripts": {
+		"dev": "nodemon src/index.ts",
+		"start": "node build/index.js --experimental-specifier-resolution=node",
+		"build": "tsc"
+	}
 }

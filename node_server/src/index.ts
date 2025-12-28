@@ -1,34 +1,37 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const Product = require("./product");
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from 'dotenv'
+import { Product } from "./product.js";
 
 const app = express();
 const port = 3333;
 
-app.use(express.json());
+dotenv.config();
+const DB_KEY = process.env.DB_KEY;
 
+app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
 
-const productData = [];
-
 async function startServer() {
     try {
-        await mongoose.connect(`mongodb+srv://Phantasiae:${db_pass}@cluster0.fxphavu.mongodb.net/Tribe`);
+		console.log(`Connecting with ${DB_KEY}...`)
+        await mongoose.connect(`mongodb+srv://Phantasiae:${DB_KEY}@cluster0.fxphavu.mongodb.net/Tribe`);
         console.log("Status: Connected to Mongoose successfully");
+        console.log(`Link: mongodb+srv://Phantasiae:${DB_KEY}@cluster0.fxphavu.mongodb.net/Tribe`);
 
-        app.post("/api/add_product", async (req, res) => {
+        app.post("/api/add_product", async (req: any, res: any) => {
             console.log("Result", req.body);
 
-            let data = Product(req.body);
+            let data = new Product(req.body);
 
-            try{
+            try {
                 let dataToStore = await data.save();
                 res.status(200).json(dataToStore);
-            } catch (error) {
+            } catch (err: any) {
                 res.status(400).json({
-                    'status': error.message
+                    'status': err.message
                 });
             }
             // const pdata = {
@@ -48,12 +51,12 @@ async function startServer() {
             // })
         });
 
-        app.get("/api/get_product", async (req, res) => {
+        app.get("/api/get_product", async (req: any, res: any) => {
 
             try {
                 let data = await Product.find();
                 res.status(200).json({ products: data });
-            } catch (error) {
+            } catch (error: any) {
                 res.status(500).json(error.message);
             }
             // if (productData.length > 0) {
@@ -69,12 +72,12 @@ async function startServer() {
             // }
         });
 
-            app.get("/api/get_product/:id", async (req, res) => {
+            app.get("/api/get_product/:id", async (req: any, res: any) => {
 
             try {
                 let data = await Product.findById(req.params.id);
                 res.status(200).json(data);
-            } catch (error) {
+            } catch (error: any) {
                 res.status(500).json(error.message);
             }
             // if (productData.length > 0) {
@@ -90,7 +93,7 @@ async function startServer() {
             // }
         });
 
-        app.put("/api/update/:id", async (req, res) => {//change flutter to patch as well!!
+        app.put("/api/update/:id", async (req: any, res: any) => {//change flutter to patch as well!!
 
             let id = req.params.id;
             let updatedData = req.body;
@@ -98,7 +101,7 @@ async function startServer() {
             try {
                 const data = await Product.findByIdAndUpdate(id, updatedData, options);
                 res.send(data);
-            } catch (error) {
+            } catch (error: any) {
                 res.send(error.message);
             }
             // let id = req.params.id;
@@ -115,7 +118,7 @@ async function startServer() {
             // })
         });
 
-        app.delete("/api/delete/:id", async (req, res) => {
+        app.delete("/api/delete/:id", async (req: any, res: any) => {
 
             let id = req.params.id;
 
@@ -124,7 +127,7 @@ async function startServer() {
                 res.json({
                     'status': "Deleted succesfully"
                 })
-            } catch (error) {
+            } catch (error: any) {
                 res.json(error.message);
             }
             // let id = req.params.id;
