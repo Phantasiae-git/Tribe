@@ -4,7 +4,6 @@ const Product = require("./product");
 
 const app = express();
 const port = 3333;
-const db_pass = "asdffghjkl-A1";//big no no, please change to env
 
 app.use(express.json());
 
