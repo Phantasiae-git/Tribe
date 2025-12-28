@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:tribe/model/product_model.dart';
 
 class Api {
-  static const baseUrl = "http://10.19.214.108/api/";
+  static const baseUrl = "http://localhost:3333/api/";
 
 
 //post method
-  static addproduct(Map pdata) async {
+  static Future<void> addproduct(Map pdata) async {
 
     print(pdata);
     var url = Uri.parse("${baseUrl}add_product");
@@ -26,7 +26,7 @@ class Api {
   }
 
 //get method
-    static getProduct() async {
+    static Future<List<dynamic>> getProduct() async {
 
     List<Product> products = [];
 
@@ -46,10 +46,11 @@ class Api {
     } catch (e) {
       print(e.toString());
     }
+    return ([]);
   }
 
 //update put method
-  static updateProduct(id, body) async {
+  static Future<void> updateProduct(id, body) async {
 
     var url = Uri.parse("${baseUrl}update/$id");
     try {
@@ -66,7 +67,7 @@ class Api {
   }
 
 //delete method
-static deleteProduct(id) async {
+static Future<void> deleteProduct(dynamic id) async {
 
     var url = Uri.parse("${baseUrl}delete/$id");
     try {

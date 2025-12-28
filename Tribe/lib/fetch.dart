@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tribe/model/product_model.dart';
 import './services/api.dart';
@@ -12,10 +14,15 @@ class FetchData extends StatelessWidget {
       body: FutureBuilder(
         future: Api.getProduct(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData){
             return Center(child: CircularProgressIndicator());
-          }else{
-            List<Product> pdata = snapshot.data;
+          } else {
+            List<Product> pdata;
+            if (snapshot.data.runtimeType == List<Product>) {
+              pdata = snapshot.data;
+            } else {
+              throw Exception("Failed to fetch data.");
+            }
             return ListView.builder(
               itemCount: pdata.length,
               itemBuilder: (BuildContext context, int index) {

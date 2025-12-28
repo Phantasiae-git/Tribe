@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv'
-import { Product } from "./product.js";
+import { Product } from "./product.ts";
 
 const app = express();
 const port = 3333;
