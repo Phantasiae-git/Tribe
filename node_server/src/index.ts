@@ -1,7 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv'
+import bcrypt from "bcryptjs";
 import { Product } from "./product.ts";
+import { User } from "./user.ts";
 
 const app = express();
 const port = 3333;
@@ -16,10 +18,57 @@ app.use(express.urlencoded({
 
 async function startServer() {
     try {
-		console.log(`Connecting with ${DB_KEY}...`)
+        console.log(`Connecting with ${DB_KEY}...`)
         await mongoose.connect(`mongodb+srv://Phantasiae:${DB_KEY}@cluster0.fxphavu.mongodb.net/Tribe`);
         console.log("Status: Connected to Mongoose successfully");
         console.log(`Link: mongodb+srv://Phantasiae:${DB_KEY}@cluster0.fxphavu.mongodb.net/Tribe`);
+
+        app.post("/api/createUser", async (req: any, res: any) => {
+            console.log("Result", req.body);
+
+            let data = new User(req.body);
+
+            try {
+                let dataToStore = await data.save();
+                res.status(200).json(dataToStore);//don't send back password!! CHANGE
+            } catch (err: any) {
+                res.status(400).json({
+                    'status': err.message
+                });
+            }
+        });
+
+        app.post("/api/login", async (req: any, res: any) => {
+            const { username, password } = req.body;
+            try {
+                const user = await User.findOne({ username });
+
+                if (!user) {
+                    return res.status(401).json({ error: "Invalid username" });
+                }
+                const isMatch = await bcrypt.compare(password, user.password);
+
+                if (!isMatch) {
+                    return res.status(401).json({ error: "Invalid password" });
+                }
+
+                res.status(200).json(user);//don't send back password!! CHANGE
+            } catch (error: any) {
+                res.status(500).json({ error: `Server error:${error.message}` });
+            }
+        });
+
+        app.get("/api/getUsers", async (req: any, res: any) => {
+
+            try {
+                let data = await User.find();
+                console.log(data);
+                res.status(200).json({ users: data });
+            } catch (error: any) {
+                res.status(500).json(error.message);
+            }
+        });
+
 
         app.post("/api/add_product", async (req: any, res: any) => {
             console.log("Result", req.body);
@@ -72,7 +121,7 @@ async function startServer() {
             // }
         });
 
-            app.get("/api/get_product/:id", async (req: any, res: any) => {
+        app.get("/api/get_product/:id", async (req: any, res: any) => {
 
             try {
                 let data = await Product.findById(req.params.id);
@@ -97,7 +146,7 @@ async function startServer() {
 
             let id = req.params.id;
             let updatedData = req.body;
-            let options = {new: true};
+            let options = { new: true };
             try {
                 const data = await Product.findByIdAndUpdate(id, updatedData, options);
                 res.send(data);
