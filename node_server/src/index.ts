@@ -39,19 +39,19 @@ async function startServer() {
         });
 
         app.post("/api/login", async (req: any, res: any) => {
-            const { username, password } = req.body;
+            const { email, password } = req.body;
             try {
-                const user = await User.findOne({ username });
+                const user = await User.findOne({ email });
 
                 if (!user) {
-                    return res.status(401).json({ error: "Invalid username" });
+                    return res.status(401).json({ error: "Invalid email" });
                 }
                 const isMatch = await bcrypt.compare(password, user.password);
 
                 if (!isMatch) {
                     return res.status(401).json({ error: "Invalid password" });
                 }
-
+                console.log(user);
                 res.status(200).json(user);//don't send back password!! CHANGE
             } catch (error: any) {
                 res.status(500).json({ error: `Server error:${error.message}` });
