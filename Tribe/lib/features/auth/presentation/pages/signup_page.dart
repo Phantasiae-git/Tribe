@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tribe/features/auth/presentation/components/my_button.dart';
 import 'package:tribe/features/auth/presentation/components/my_text_field.dart';
+import 'package:tribe/features/auth/presentation/cubits/auth_cubit.dart';
 
 class SignupPage extends StatefulWidget {
   final void Function()? togglePages;
@@ -15,6 +17,41 @@ class _SignupPageState extends State<SignupPage> {
   final emailController = TextEditingController();
   final pwController = TextEditingController();
   final confirmPwController = TextEditingController();
+
+  void register() {
+    final String username = usernameController.text;
+    final String email = emailController.text;
+    final String pw = pwController.text;
+    final String confirmPw = confirmPwController.text;
+
+    final authCubit = context.read<AuthCubit>();
+
+    if (username.isNotEmpty &&
+        email.isNotEmpty &&
+        pw.isNotEmpty &&
+        confirmPw.isNotEmpty) {
+      if (pw == confirmPw) {
+        authCubit.register(username, email, pw);
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
+      }
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+    }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    pwController.dispose();
+    confirmPwController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 25),
-                MyButton(onTap: () {}, text: "Register"),
+                MyButton(onTap: register, text: "Register"),
 
                 const SizedBox(height: 50),
                 Row(
