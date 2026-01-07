@@ -5,18 +5,29 @@ import 'package:tribe/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:tribe/features/auth/presentation/cubits/auth_states.dart';
 import 'package:tribe/features/auth/presentation/pages/auth_page.dart';
 import 'package:tribe/features/home/presentation/pages/home_page.dart';
+import 'package:tribe/features/profile/data/node_profile_repo.dart';
+import 'package:tribe/features/profile/domain/repos/profile_repo.dart';
+import 'package:tribe/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:tribe/themes/light_mode.dart';
 
 class MyApp extends StatelessWidget {
   final authRepo = NodeAuthRepo();
+  final profileRepo = NodeProfileRepo();
 
   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     //providing the cubit to the main app
-    return BlocProvider(
-      create: (context) => AuthCubit(authRepo: authRepo)..checkAuth(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(authRepo: authRepo)..checkAuth(),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(profileRepo: profileRepo),
+        ),
+      ],
       child: MaterialApp(
         title: "Tribe",
         debugShowCheckedModeBanner: false,
@@ -37,8 +48,10 @@ class MyApp extends StatelessWidget {
             }
           },
           listener: (context, state) {
-            if(state is AuthError){
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+            if (state is AuthError) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
         ),

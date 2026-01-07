@@ -58,6 +58,39 @@ async function startServer() {
             }
         });
 
+        app.get("/api/getUser/:id", async (req: any, res: any) => {
+            let _id = req.params.id;
+            try {
+                const user = await User.findOne({ _id });
+
+                if (!user) {
+                    return res.status(401).json({ error: "Invalid uid" });
+                }
+                console.log(user);
+                res.status(200).json(user);
+            } catch (error: any) {
+                res.status(500).json({ error: `Server error:${error.message}` });
+            }
+        });
+
+        app.put("/api/updateUser/:id", async (req: any, res: any) => {
+           
+            let id = req.params.id;
+            let updatedData = req.body;
+            let options = { new: true };
+    
+            try {
+                const data = await User.findByIdAndUpdate(id, updatedData, options);
+                if (!data) {
+                    res.status(404).json({ error: "User not found" });
+                }else{
+                    res.status(200).json(data);
+                }
+            } catch (error: any) {
+                res.status(500).json({ error: error.message });
+            }
+        });
+
         app.get("/api/getUsers", async (req: any, res: any) => {
 
             try {
