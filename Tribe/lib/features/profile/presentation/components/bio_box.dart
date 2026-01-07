@@ -11,6 +11,7 @@ class BioBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary
       ),
+      width: double.infinity,
       child: Text(text.isNotEmpty ? text : "Bio is still empty boooo", style: TextStyle(
         color: Theme.of(context).colorScheme.inversePrimary
       ),),
