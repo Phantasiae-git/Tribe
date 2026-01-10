@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tribe/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:tribe/features/home/presentation/components/my_drawer_tile.dart';
+import 'package:tribe/features/matchmaking/presentation/pages/find_group_page.dart';
 import 'package:tribe/features/profile/presentation/pages/profile_page.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -32,7 +33,11 @@ class MyDrawer extends StatelessWidget {
                 final user = context.read<AuthCubit>().currentUser;
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(uid: user!.uid),));
               }),
-              MyDrawerTile(title: "FIND YOUR TRIBE", icon: Icons.people, onTap: () {}),
+              MyDrawerTile(title: "FIND YOUR TRIBE", icon: Icons.people, onTap: () {
+                Navigator.of(context).pop();
+                final user = context.read<AuthCubit>().currentUser;
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FindGroupPage(uid: user!.uid),));
+              }),
               MyDrawerTile(title: "SEARCH USERS", icon: Icons.search, onTap: () {}),
               MyDrawerTile(title: "SETTINGS", icon: Icons.settings, onTap: () {}),
 

@@ -1,10 +1,11 @@
-import 'dart:convert';
+
 
 import 'package:tribe/features/auth/domain/entities/app_user.dart';
 
 class ProfileUser extends AppUser {
   final String bio;
   final String pfpUrl;
+  final List<String> friends;
 
   ProfileUser({
     required super.uid,
@@ -12,16 +13,18 @@ class ProfileUser extends AppUser {
     required super.username,
     required this.bio,
     required this.pfpUrl,
+    required this.friends,
   });
 
   //update profile user
-  ProfileUser copyWith({String? newBio, String? newPfpurl}) {
+  ProfileUser copyWith({String? newBio, String? newPfpurl, List<String>? newFriends}) {
     return ProfileUser(
       uid: uid,
       email: email,
       username: username,
       bio: newBio ?? bio,
       pfpUrl: newPfpurl ?? pfpUrl,
+      friends: newFriends ?? friends,
     );
   }
 
@@ -32,6 +35,7 @@ class ProfileUser extends AppUser {
       'username': username,
       'bio': bio,
       'pfp': pfpUrl,
+      'friends': friends
     });
   }
 
@@ -42,6 +46,7 @@ class ProfileUser extends AppUser {
       username: jsonUser['username'],
       bio: jsonUser['bio'] ?? '',
       pfpUrl: jsonUser['pfp'] ?? '',
+      friends: List<String>.from(jsonUser['friends'] ??[])
     );
   }
 }

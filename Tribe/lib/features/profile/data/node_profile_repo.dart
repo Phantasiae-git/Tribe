@@ -5,40 +5,43 @@ import 'package:tribe/features/profile/domain/entities/profile_user.dart';
 import 'package:tribe/features/profile/domain/repos/profile_repo.dart';
 
 class NodeProfileRepo implements ProfileRepo {
-
   final ApiClient api = ApiClient();
   ProfileUser? user;
 
   @override
-  Future<ProfileUser?> fetchUserProfile(String uid) async{
-    try{
-      final res = await api.get(
-        "getUser/$uid",
-      );
+  Future<ProfileUser?> fetchUserProfile(String uid) async {
+    try {
+      final res = await api.get("getUser/$uid");
       final body = jsonDecode(res.body);
       print(body);
       if (res.statusCode == 200) {
-        return ProfileUser(uid: uid, email: body['email'], username: body['username'], bio: body['bio'] ?? "", pfpUrl: body['pfp'] ?? "");
+        final friends = List<String>.from(body['friends'] ?? []);
+
+        return ProfileUser(
+          uid: uid,
+          email: body['email'],
+          username: body['username'],
+          bio: body['bio'] ?? "",
+          pfpUrl: body['pfp'] ?? "",
+          friends: friends,
+        );
       }
 
       if (res.statusCode == 500) {
         throw Exception(body['error']);
       }
       return null;
-    }catch(e){
+    } catch (e) {
       return null;
     }
   }
 
-@override
+  @override
   Future<void> updateProfile(ProfileUser updatedProfile) async {
     try {
       final res = await api.put(
         "updateUser/${updatedProfile.uid}",
-              body: {
-        "bio": updatedProfile.bio,
-        "pfp": updatedProfile.pfpUrl
-      },
+        body: {"bio": updatedProfile.bio, "pfp": updatedProfile.pfpUrl},
       );
       final body = jsonDecode(res.body);
 
@@ -48,5 +51,21 @@ class NodeProfileRepo implements ProfileRepo {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  @override
+  Future<void> toggleFriend(String currentUid, String targetUid) async {
+    try {
+      final currentRes = await api.get("getUser/$currentUid");
+
+      final targetRes = await api.get("getUser/$targetUid");
+
+      if (currentRes.statusCode == 200 && targetRes.statusCode == 200) {
+        final currentBody = jsonDecode(currentRes.body);
+        final targetBody = jsonDecode(targetRes.body);
+        
+        final List<String> currentFriends = List<String>.from(currentBody['friends'] ?? []);
+      }
+    } catch (e) {}
   }
 }
