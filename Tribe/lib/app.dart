@@ -6,13 +6,14 @@ import 'package:tribe/features/auth/presentation/cubits/auth_states.dart';
 import 'package:tribe/features/auth/presentation/pages/auth_page.dart';
 import 'package:tribe/features/home/presentation/pages/home_page.dart';
 import 'package:tribe/features/profile/data/node_profile_repo.dart';
-import 'package:tribe/features/profile/domain/repos/profile_repo.dart';
 import 'package:tribe/features/profile/presentation/cubits/profile_cubit.dart';
+import 'package:tribe/features/storage/data/node_storage_repo.dart';
 import 'package:tribe/themes/light_mode.dart';
 
 class MyApp extends StatelessWidget {
   final authRepo = NodeAuthRepo();
   final profileRepo = NodeProfileRepo();
+  final storageRepo = NodeStorageRepo();//replace with firebase/other cloud storage solution
 
   MyApp({super.key});
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthCubit(authRepo: authRepo)..checkAuth(),
         ),
         BlocProvider<ProfileCubit>(
-          create: (context) => ProfileCubit(profileRepo: profileRepo),
+          create: (context) => ProfileCubit(profileRepo: profileRepo, storageRepo: storageRepo),
         ),
       ],
       child: MaterialApp(

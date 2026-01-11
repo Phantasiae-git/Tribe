@@ -24,11 +24,18 @@ async function startServer() {
         console.log(`Link: mongodb+srv://Phantasiae:${DB_KEY}@cluster0.fxphavu.mongodb.net/Tribe`);
 
         app.post("/api/createUser", async (req: any, res: any) => {
-            console.log("Result", req.body);
-
-            let data = new User(req.body);
-
             try {
+                console.log("Result", req.body);
+                const { username, email, password } = req.body;
+
+                if (!username || !email || !password) {
+                    return res.status(400).json({
+                        error: "Username, email, and password are required",
+                    });
+                }
+
+                let data = new User(req.body);
+
                 let dataToStore = await data.save();
                 res.status(200).json(dataToStore);//don't send back password!! CHANGE
             } catch (err: any) {
@@ -74,16 +81,16 @@ async function startServer() {
         });
 
         app.put("/api/updateUser/:id", async (req: any, res: any) => {
-           
+
             let id = req.params.id;
             let updatedData = req.body;
             let options = { new: true };
-    
+
             try {
                 const data = await User.findByIdAndUpdate(id, updatedData, options);
                 if (!data) {
                     res.status(404).json({ error: "User not found" });
-                }else{
+                } else {
                     res.status(200).json(data);
                 }
             } catch (error: any) {
