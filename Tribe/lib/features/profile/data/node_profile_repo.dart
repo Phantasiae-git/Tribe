@@ -11,7 +11,7 @@ class NodeProfileRepo implements ProfileRepo {
   @override
   Future<ProfileUser?> fetchUserProfile(String uid) async {
     try {
-      final res = await api.get("getUser/$uid");
+      final res = await api.get("users/$uid");
       final body = jsonDecode(res.body);
       print(body);
       if (res.statusCode == 200) {
@@ -40,7 +40,7 @@ class NodeProfileRepo implements ProfileRepo {
   Future<void> updateProfile(ProfileUser updatedProfile) async {
     try {
       final res = await api.put(
-        "updateUser/${updatedProfile.uid}",
+        "users/${updatedProfile.uid}",
         body: {"bio": updatedProfile.bio, "pfp": updatedProfile.pfpUrl},
       );
       final body = jsonDecode(res.body);
@@ -56,9 +56,9 @@ class NodeProfileRepo implements ProfileRepo {
   @override
   Future<void> toggleFriend(String currentUid, String targetUid) async {
     try {
-      final currentRes = await api.get("getUser/$currentUid");
+      final currentRes = await api.get("users/$currentUid");
 
-      final targetRes = await api.get("getUser/$targetUid");
+      final targetRes = await api.get("users/$targetUid");
 
       if (currentRes.statusCode == 200 && targetRes.statusCode == 200) {
         final currentBody = jsonDecode(currentRes.body);

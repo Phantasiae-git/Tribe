@@ -13,7 +13,7 @@ class NodeAuthRepo implements AuthRepo {
   Future<AppUser?> loginWithEmailPassword(String email, String password) async {
     try {
       final res = await api.post(
-        "login",
+        "auth/login",
         body: {"email": email, "password": password},
       );
 
@@ -42,18 +42,20 @@ class NodeAuthRepo implements AuthRepo {
   ) async {
     try {
       final res = await api.post(
-        "createUser",
+        "auth/register",
         body: {"username": username, "email": email, "password": password},
       );
 
+      print(res.body);
+
+      final body = jsonDecode(res.body);
+
       if (res.statusCode == 200) {
-        currentUser = AppUser.fromJson(
-          jsonDecode(res.body),
-        ); //should return uid, email, name
+        currentUser = AppUser.fromJson(body);
         return currentUser;
       }
 
-      return null;
+      throw Exception(body['error'] ?? 'Signup failed');
     } catch (e) {
       throw Exception('Signup failed: $e');
     }
