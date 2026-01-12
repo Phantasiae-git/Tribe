@@ -27,13 +27,15 @@ function haversine_formula(coord1: [number, number], coord2: [number, number]) {
 //tolerance_rad: radius(km) in which the location around where user wants to live is still acceptable
 //tolerance_rad === sigma
 function gaussian_kernel(distance: number, tolerance_rad: number = 5) {
-    let score = Math.exp((distance ** 2) / (2 * tolerance_rad ** 2));
+    let score = Math.exp(-(distance ** 2) / (2 * tolerance_rad ** 2));
     return score;
 }
 
 // function will get centers of users from db and emit 
-export default function location_score(coord1: [number, number], coord2: [number, number]): number {
+export default function location_score(coord1: [number, number], coord2: [number, number], sigma1: number = 5, sigma2: number = 5): number {
     let distanceKm = haversine_formula(coord1, coord2);
-    return gaussian_kernel(distanceKm);
+    let s1 = gaussian_kernel(distanceKm, sigma1);
+    let s2 = gaussian_kernel(distanceKm, sigma2);
+    return Math.min(s1, s2); // returning smallest because it should tke into account what both people want
 }
 
