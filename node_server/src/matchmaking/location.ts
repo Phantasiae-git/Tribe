@@ -36,6 +36,6 @@ export default function location_score(coord1: [number, number], coord2: [number
     let distanceKm = haversine_formula(coord1, coord2);
     let s1 = gaussian_kernel(distanceKm, sigma1);
     let s2 = gaussian_kernel(distanceKm, sigma2);
-    return Math.min(s1, s2); // returning smallest because it should tke into account what both people want
+    return parseFloat(Math.min(s1, s2).toFixed(2)); // returning smallest because it should tke into account what both people want
 }
 
