@@ -5,15 +5,19 @@ import 'package:tribe/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:tribe/features/auth/presentation/cubits/auth_states.dart';
 import 'package:tribe/features/auth/presentation/pages/auth_page.dart';
 import 'package:tribe/features/home/presentation/pages/home_page.dart';
+import 'package:tribe/features/matchmaking/data/node_tribe_form_repo.dart';
+import 'package:tribe/features/matchmaking/presentation/cubits/form_cubit.dart';
 import 'package:tribe/features/profile/data/node_profile_repo.dart';
 import 'package:tribe/features/profile/presentation/cubits/profile_cubit.dart';
 import 'package:tribe/features/storage/data/node_storage_repo.dart';
 import 'package:tribe/themes/light_mode.dart';
 
+
 class MyApp extends StatelessWidget {
   final authRepo = NodeAuthRepo();
   final profileRepo = NodeProfileRepo();
   final storageRepo = NodeStorageRepo();//replace with firebase/other cloud storage solution
+  final tribeFormRepo = NodeTribeFormRepo();
 
   MyApp({super.key});
 
@@ -27,6 +31,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(profileRepo: profileRepo, storageRepo: storageRepo),
+        ),
+        BlocProvider<TribeFormCubit>(
+          create: (context) => TribeFormCubit(tribeFormRepo: tribeFormRepo),
         ),
       ],
       child: MaterialApp(

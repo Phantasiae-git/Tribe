@@ -2,54 +2,58 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 let userSchema = new mongoose.Schema({
-    'username': {
+    username: {
         required: true,
         type: String
     },
-    'name': {
+    name: {
         required: false,
         type: String
     },
-    'email': {
+    email: {
         required: true,
         type: String
     },
-    'password': {
+    password: {
         required: true,
         type: String
     },
-    'pfp': {
+    pfp: {
         required: false,
         type: String
     },
-    'dob': {
+    dob: {
         required: false,
         type: String
     },
-    'occupation': {
+    occupation: {
         required: false,
         type: String
     },
-    'currLoc': {
+    currLoc: {
         required: false,
         type: String
     },
-    'gender': {
+    gender: {
         required: false,
         type: String
     },
-    'mbti': {
+    mbti: {
         required: false,
         type: String
     },
-    'bio': {
+    bio: {
         required: false,
         type: String
     },
     friends: {
         type: [String],
         default: [],
-    }
+    },
+    forms: {
+        type: [String],
+        default: [],
+    },
 });
 
 userSchema.pre("save", async function () {
